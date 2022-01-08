@@ -1,0 +1,30 @@
+pipeline:
+  # build:
+  #   image: docker
+  #   commands:
+  #     - docker pull $CONTAINER_IMAGE:latest || true
+  #     - docker build --cache-from $CONTAINER_IMAGE:latest -t $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA:0:8} -t $CI_REGISTRY_IMAGE:latest .
+  #     - docker push $CI_REGISTRY_IMAGE:latest
+  #     - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA:0:8}
+  # # build:
+  # #   image: docker:latest
+  # #   commands:
+  # #     - docker pull $CONTAINER_IMAGE:latest || true
+  # #     - docker build --cache-from $CONTAINER_IMAGE:latest -t $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA:0:8} -t $CI_REGISTRY_IMAGE:latest .
+  # #     - docker push $CI_REGISTRY_IMAGE:latest
+  # #     - docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_SHA:0:8}
+  publish:
+    image: plugins/docker
+    settings:
+      tags: ${CI_COMMIT_SHA:0:8}
+      username:
+        from_secret: local_docker_registry_user
+      password:
+        from_secret: local_docker_registry_pass
+      repo:
+        from_secret: local_docker_repo
+      registry:
+        from_secret: local_docker_registry
+    when:
+      branch: master
+
